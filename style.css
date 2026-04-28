@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=Sora:wght@500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --azul:         #1a4b8c;
+  --azul-escuro:  #0f2f5c;
+  --azul-claro:   #3b82f6;
+  --azul-palido:  #e6f0ff;
+  --amarelo:      #f5c518;
+  --amarelo-escuro: #d4a800;
+  --cinza:        #6b7280;
+  --cinza-claro:  #f3f4f6;
+  --branco:       #ffffff;
+  --texto:        #1f2937;
+  --borda:        #d1d5db;
+  --sombra:       0 4px 24px rgba(26, 75, 140, 0.10);
+  --sombra-hover: 0 8px 32px rgba(26, 75, 140, 0.18);
+  --success: #48bb78;
+  --error:   #e53e3e;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(135deg, #f0f6ff 0%, #e6f0ff 40%, #f7faff 100%);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+
+
+.glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(26,75,140,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.brasao {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 16px rgba(26,75,140,0.2));
+}
+
+.badge {
+  display: inline-block;
+  background: var(--amarelo);
+  color: var(--azul-escuro);
+  border: none;
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--azul-escuro);
+  margin-bottom: 0.75rem;
+}
+
+h1 span { color: var(--azul-claro); }
+
+.subtitle {
+  font-size: 14px;
+  color: var(--cinza);
+  line-height: 1.6;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--branco);
+  border: none;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--sombra);
+  border-top: 4px solid var(--azul);
+}
+
+.field { margin-bottom: 1.5rem; }
+
+label {
+  display: block;
+  font-family: 'Sora', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--azul-escuro);
+  margin-bottom: 0.5rem;
+}
+
+input, textarea {
+  width: 100%;
+  background: var(--cinza-claro);
+  border: 1.5px solid var(--borda);
+  border-radius: 10px;
+  color: var(--texto);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(26, 75, 140, 0.1);
+  background: var(--branco);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--cinza);
+  opacity: 0.6;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.field-error {
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 0.4rem;
+  display: none;
+}
+
+.field.has-error input,
+.field.has-error textarea { border-color: var(--error); }
+
+.field.has-error .field-error { display: block; }
+
+/* ── BOTÃO ── */
+.btn {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul) 100%);
+  color: var(--branco);
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 16px rgba(26, 75, 140, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(26, 75, 140, 0.35);
+}
+
+.btn:active { transform: scale(0.99); }
+
+.btn:disabled {
+  background: var(--borda);
+  color: var(--cinza);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+.btn.loading .spinner { display: block; }
+.btn.loading .btn-text { opacity: 0.6; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  margin-top: 1rem;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-size: 14px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast.success {
+  background: #f0fdf4;
+  border: 1.5px solid #48bb78;
+  color: #276749;
+  display: flex;
+}
+
+.toast.error {
+  background: #fee2e2;
+  border: 1.5px solid var(--error);
+  color: #991b1b;
+  display: flex;
+}
+
+.toast-icon { font-size: 16px; flex-shrink: 0; }
+
+.divider {
+  height: 1px;
+  background: var(--borda);
+  margin: 1.75rem 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .card { padding: 1.5rem 1.25rem; }
+  h1 { font-size: 1.8rem; }
+}
+
+/* ── IDENTIDADE INSTITUCIONAL ── */
+.inst-nome {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--azul-escuro);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.2rem;
+}
+
+.inst-setor {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--cinza);
+  font-weight: 400;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.02em;
+}
+
+.inst-lema {
+  display: inline-block;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--azul-escuro);
+  background: var(--amarelo);
+  padding: 3px 14px;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.03em;
+}
+
+.divider-header {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--azul), var(--amarelo), var(--azul), transparent);
+  border-radius: 2px;
+  margin: 0 auto 1.5rem;
+  width: 80%;
+  opacity: 0.4;
+}
+
+/* ── FOOTER DO FORMULÁRIO ── */
+.footer-form {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 11px;
+  color: var(--cinza);
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+
+/* ── HEADER INSTITUCIONAL (topo da página) ── */
+.header-institucional {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(90deg, var(--azul-escuro) 0%, var(--azul) 100%);
+  border-bottom: 3px solid var(--amarelo);
+  padding: 0.55rem 1.5rem;
+}
+
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.header-brasao {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+}
+
+.header-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.header-prefeitura {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.header-lema {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  color: var(--amarelo);
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* empurra o conteúdo para baixo do header fixo */
+body {
+  padding-top: 72px;
+}
+
+@media (max-width: 480px) {
+  .header-prefeitura { font-size: 0.82rem; }
+  .header-brasao { width: 34px; height: 34px; }
+}
