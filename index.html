@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="conferencia_saude/img/prefeitura.png">
+  <title>Formulário — Conferência da Saúde</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=Sora:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="conferencia_saude/style.css" />
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="glow"></div>
+
+  <!-- HEADER INSTITUCIONAL -->
+  <header class="header-institucional">
+    <div class="header-inner">
+      <img src="conferencia_saude/img/prefeitura.png" alt="Brasão de Oriximiná" class="header-brasao" />
+      <div class="header-texto">
+        <div class="header-prefeitura">Prefeitura Municipal de Oriximiná</div>
+        <div class="header-lema">"A transformação não vai parar!"</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <div class="header">
+      <h1>Sua <span>opinião</span><br>importa muito</h1>
+      <p class="subtitle">Preencha o formulário abaixo e nos ajude<br>a melhorar os próximos eventos.</p>
+    </div>
+
+    <div class="card">
+      <form id="feedbackForm" novalidate>
+
+        <div class="field" id="field-nome">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" placeholder="Ex: Maria da Silva" autocomplete="name" />
+          <div class="field-error">Por favor, informe seu nome completo.</div>
+        </div>
+
+        <div class="field" id="field-email">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" />
+          <div class="field-error">Informe um e-mail válido.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field" id="field-opiniao">
+          <label for="opiniao">Opinião sobre a conferência</label>
+          <textarea id="opiniao" placeholder="Conte o que achou: pontos positivos, o que poderia melhorar, experiências..."></textarea>
+          <div class="field-error">Por favor, compartilhe sua opinião.</div>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-text">Enviar feedback</span>
+        </button>
+
+        <div class="toast" id="toast">
+          <span class="toast-icon" id="toastIcon"></span>
+          <span id="toastMsg"></span>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="footer-form">
+      Secretaria Municipal de Eficiência Governamental &mdash; SEMEG"
+    </div>
+  </div>
+
+  <script src="conferencia_saude/script.js"></script>
+</body>
+</html>
