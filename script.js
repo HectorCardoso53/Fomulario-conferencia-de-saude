@@ -1,32 +1,47 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwX-ZqXtyHBc6EYVDFacqHUEfXnadxX7QcsJ30rdnR_Ka4E9uFEuLaC_WKmxWn0NwMW3A/exec";
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwX-ZqXtyHBc6EYVDFacqHUEfXnadxX7QcsJ30rdnR_Ka4E9uFEuLaC_WKmxWn0NwMW3A/exec";
 
-const form  = document.getElementById("feedbackForm");
-const btn   = document.getElementById("submitBtn");
+const form = document.getElementById("feedbackForm");
+const btn = document.getElementById("submitBtn");
 const toast = document.getElementById("toast");
 
 function showToast(type, msg) {
   toast.className = "toast " + type;
-  document.getElementById("toastIcon").textContent = type === "success" ? "✓" : "✕";
-  document.getElementById("toastMsg").textContent  = msg;
+  document.getElementById("toastIcon").textContent =
+    type === "success" ? "✓" : "✕";
+  document.getElementById("toastMsg").textContent = msg;
 }
 
 function validate() {
   let ok = true;
 
-  const nome      = document.getElementById("nome").value.trim();
+  const nome = document.getElementById("nome").value.trim();
   const fieldNome = document.getElementById("field-nome");
-  if (nome.length < 3) { fieldNome.classList.add("has-error"); ok = false; }
-  else fieldNome.classList.remove("has-error");
+  if (nome.length < 3) {
+    fieldNome.classList.add("has-error");
+    ok = false;
+  } else fieldNome.classList.remove("has-error");
 
-  const email      = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim();
   const fieldEmail = document.getElementById("field-email");
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fieldEmail.classList.add("has-error"); ok = false; }
-  else fieldEmail.classList.remove("has-error");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    fieldEmail.classList.add("has-error");
+    ok = false;
+  } else fieldEmail.classList.remove("has-error");
 
-  const opiniao      = document.getElementById("opiniao").value.trim();
+  const opiniao = document.getElementById("opiniao").value.trim();
   const fieldOpiniao = document.getElementById("field-opiniao");
-  if (opiniao.length < 5) { fieldOpiniao.classList.add("has-error"); ok = false; }
-  else fieldOpiniao.classList.remove("has-error");
+  if (opiniao.length < 5) {
+    fieldOpiniao.classList.add("has-error");
+    ok = false;
+  } else fieldOpiniao.classList.remove("has-error");
+
+  const declaracao = document.getElementById("declaracao").checked;
+  const fieldDeclaracao = document.getElementById("field-declaracao");
+  if (!declaracao) {
+    fieldDeclaracao.classList.add("has-error");
+    ok = false;
+  } else fieldDeclaracao.classList.remove("has-error");
 
   return ok;
 }
@@ -34,7 +49,8 @@ function validate() {
 // Verifica se o e-mail já foi cadastrado consultando a planilha
 async function emailJaCadastrado(email) {
   try {
-    const url = SCRIPT_URL + "?acao=verificar&email=" + encodeURIComponent(email);
+    const url =
+      SCRIPT_URL + "?acao=verificar&email=" + encodeURIComponent(email);
     const res = await fetch(url);
     const data = await res.json();
     return data.existe === true;
@@ -48,20 +64,20 @@ async function emailJaCadastrado(email) {
 function enviarViaIframe(params) {
   return new Promise((resolve) => {
     const iframeName = "hidden_frame_" + Date.now();
-    const iframe     = document.createElement("iframe");
+    const iframe = document.createElement("iframe");
     iframe.style.display = "none";
-    iframe.name          = iframeName;
+    iframe.name = iframeName;
     document.body.appendChild(iframe);
 
-    const tempForm  = document.createElement("form");
+    const tempForm = document.createElement("form");
     tempForm.method = "GET";
     tempForm.action = SCRIPT_URL;
     tempForm.target = iframeName;
 
     for (const [key, val] of params.entries()) {
       const input = document.createElement("input");
-      input.type  = "hidden";
-      input.name  = key;
+      input.type = "hidden";
+      input.name = key;
       input.value = val;
       tempForm.appendChild(input);
     }
@@ -82,8 +98,8 @@ form.addEventListener("submit", async (e) => {
   toast.className = "toast";
   if (!validate()) return;
 
-  const nome    = document.getElementById("nome").value.trim();
-  const email   = document.getElementById("email").value.trim();
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
   const opiniao = document.getElementById("opiniao").value.trim();
 
   btn.disabled = true;
@@ -94,9 +110,13 @@ form.addEventListener("submit", async (e) => {
   if (duplicado) {
     const fieldEmail = document.getElementById("field-email");
     fieldEmail.classList.add("has-error");
-    fieldEmail.querySelector(".field-error").textContent = "Este e-mail já enviou uma resposta.";
+    fieldEmail.querySelector(".field-error").textContent =
+      "Este e-mail já enviou uma resposta.";
     fieldEmail.classList.add("has-error");
-    showToast("error", "Este e-mail já foi cadastrado. Cada pessoa pode responder apenas uma vez.");
+    showToast(
+      "error",
+      "Este e-mail já foi cadastrado. Cada pessoa pode responder apenas uma vez.",
+    );
     btn.disabled = false;
     btn.classList.remove("loading");
     return;
@@ -108,7 +128,10 @@ form.addEventListener("submit", async (e) => {
     showToast("success", "Obrigado! Seu feedback foi enviado com sucesso.");
     form.reset();
   } catch (err) {
-    showToast("error", "Erro ao enviar. Verifique sua conexão e tente novamente.");
+    showToast(
+      "error",
+      "Erro ao enviar. Verifique sua conexão e tente novamente.",
+    );
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");

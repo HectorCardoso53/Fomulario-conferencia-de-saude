@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/img/prefeitura.png">
+  <link rel="icon" type="image/png" href="img/prefeitura.png">
   <title>Formulário — Conferência da Saúde</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=Sora:wght@500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=Sora:wght@500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <div class="bg-grid"></div>
@@ -16,17 +20,20 @@
   <!-- HEADER INSTITUCIONAL -->
   <header class="header-institucional">
     <div class="header-inner">
-      <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="header-brasao" />
-      <div class="header-texto">
-        <div class="header-prefeitura">Prefeitura Municipal de Oriximiná</div>
-        <div class="header-lema">"A transformação não vai parar!"</div>
+      <div class="header-esquerda">
+        <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="header-brasao" />
+        <div class="header-texto">
+          <div class="header-prefeitura">Prefeitura Municipal de Oriximiná</div>
+          <div class="header-lema">"A transformação não vai parar!"</div>
+        </div>
       </div>
+      <img src="img/saude.png" alt="Logo Conferência de Saúde" class="header-brasao-evento" />
     </div>
   </header>
 
   <div class="wrapper">
     <div class="header">
-      <h1>Sua <span>opinião</span><br>importa muito</h1>
+      <h1>Conselho Municipal <span> de Saúde</span></h1>
       <p class="subtitle">Preencha o formulário abaixo e nos ajude<br>a melhorar os próximos eventos.</p>
     </div>
 
@@ -49,8 +56,23 @@
 
         <div class="field" id="field-opiniao">
           <label for="opiniao">Opinião sobre a conferência</label>
-          <textarea id="opiniao" placeholder="Conte o que achou: pontos positivos, o que poderia melhorar, experiências..."></textarea>
+          <textarea id="opiniao"
+            placeholder="Conte o que achou: pontos positivos, o que poderia melhorar, experiências..."></textarea>
           <div class="field-error">Por favor, compartilhe sua opinião.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field" id="field-declaracao">
+          <label>Declaração de participação</label>
+          <div class="declaracao-box">
+            <input type="checkbox" id="declaracao" />
+            <label for="declaracao" class="declaracao-label">
+              Declaro que participei da <strong>Conferência Municipal de Saúde</strong>
+              e que as informações prestadas neste formulário são verdadeiras.
+            </label>
+          </div>
+          <div class="field-error" id="erro-declaracao">Você precisa confirmar sua participação.</div>
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
@@ -73,4 +95,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
