@@ -3,50 +3,87 @@ const SCRIPT_URL =
 
 const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
-const toast = document.getElementById("toast");
+
+// Sempre busca o toast no DOM para evitar null
+function getToast() {
+  return document.getElementById("toast");
+}
 
 function showToast(type, msg) {
+  const toast = getToast();
+  if (!toast) return;
   toast.className = "toast " + type;
   document.getElementById("toastIcon").textContent =
     type === "success" ? "✓" : "✕";
   document.getElementById("toastMsg").textContent = msg;
 }
 
+function hideToast() {
+  const toast = getToast();
+  if (toast) toast.className = "toast";
+}
+
 function validate() {
   let ok = true;
 
+  // ── Nome ──
   const nome = document.getElementById("nome").value.trim();
   const fieldNome = document.getElementById("field-nome");
+  const nomeValido =
+    /^[A-ZÀ-Ú][a-zA-Zà-úÀ-Ú]*(?: (?:de|da|do|dos|das|e|[A-ZÀ-Ú])[a-zA-Zà-úÀ-Ú]*)+$/.test(
+      nome,
+    );
+
   if (nome.length < 3) {
     fieldNome.classList.add("has-error");
+    fieldNome.querySelector(".field-error").textContent =
+      "Por favor, informe seu nome completo.";
     ok = false;
-  } else fieldNome.classList.remove("has-error");
+  } else if (!nomeValido) {
+    fieldNome.classList.add("has-error");
+    fieldNome.querySelector(".field-error").textContent =
+      "Digite nome e sobrenome com inicial maiúscula. Ex: Maria Silva";
+    ok = false;
+  } else {
+    fieldNome.classList.remove("has-error");
+  }
 
+  // ── E-mail ──
   const email = document.getElementById("email").value.trim();
   const fieldEmail = document.getElementById("field-email");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldEmail.classList.add("has-error");
+    fieldEmail.querySelector(".field-error").textContent =
+      "Informe um e-mail válido.";
     ok = false;
-  } else fieldEmail.classList.remove("has-error");
+  } else {
+    fieldEmail.classList.remove("has-error");
+  }
 
+  // ── Opinião ──
   const opiniao = document.getElementById("opiniao").value.trim();
   const fieldOpiniao = document.getElementById("field-opiniao");
   if (opiniao.length < 5) {
     fieldOpiniao.classList.add("has-error");
     ok = false;
-  } else fieldOpiniao.classList.remove("has-error");
+  } else {
+    fieldOpiniao.classList.remove("has-error");
+  }
 
+  // ── Declaração ──
   const declaracao = document.getElementById("declaracao").checked;
   const fieldDeclaracao = document.getElementById("field-declaracao");
   if (!declaracao) {
     fieldDeclaracao.classList.add("has-error");
     ok = false;
-  } else fieldDeclaracao.classList.remove("has-error");
+  } else {
+    fieldDeclaracao.classList.remove("has-error");
+  }
 
   return ok;
 }
 
-// Verifica se o e-mail já foi cadastrado consultando a planilha
+// Verifica se o e-mail já foi cadastrado
 async function emailJaCadastrado(email) {
   try {
     const url =
@@ -55,12 +92,11 @@ async function emailJaCadastrado(email) {
     const data = await res.json();
     return data.existe === true;
   } catch (err) {
-    // Se não conseguir verificar, permite continuar
     return false;
   }
 }
 
-// Envia os dados via iframe (sem bloqueio de CORS)
+// Envia via iframe para evitar bloqueio de CORS
 function enviarViaIframe(params) {
   return new Promise((resolve) => {
     const iframeName = "hidden_frame_" + Date.now();
@@ -93,9 +129,11 @@ function enviarViaIframe(params) {
   });
 }
 
+// ── Submit ──
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  toast.className = "toast";
+  hideToast();
+
   if (!validate()) return;
 
   const nome = document.getElementById("nome").value.trim();
@@ -105,14 +143,13 @@ form.addEventListener("submit", async (e) => {
   btn.disabled = true;
   btn.classList.add("loading");
 
-  // ── Verificar e-mail duplicado ──
+  // Verifica duplicado
   const duplicado = await emailJaCadastrado(email);
   if (duplicado) {
     const fieldEmail = document.getElementById("field-email");
     fieldEmail.classList.add("has-error");
     fieldEmail.querySelector(".field-error").textContent =
       "Este e-mail já enviou uma resposta.";
-    fieldEmail.classList.add("has-error");
     showToast(
       "error",
       "Este e-mail já foi cadastrado. Cada pessoa pode responder apenas uma vez.",
@@ -125,15 +162,39 @@ form.addEventListener("submit", async (e) => {
   try {
     const params = new URLSearchParams({ nome, email, opiniao });
     await enviarViaIframe(params);
-    showToast("success", "Obrigado! Seu feedback foi enviado com sucesso.");
     form.reset();
+    abrirModal();
+    setTimeout(() => hideToast(), 5000);
   } catch (err) {
     showToast(
       "error",
       "Erro ao enviar. Verifique sua conexão e tente novamente.",
     );
+    setTimeout(() => hideToast(), 5000);
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");
   }
 });
+
+// ── Orientação ao focar no nome ──
+document.getElementById("nome").addEventListener("focus", () => {
+  showToast(
+    "info",
+    "Digite nome e sobrenome com inicial maiúscula para emissão do certificado. Ex: Maria da Silva",
+  );
+});
+
+document.getElementById("nome").addEventListener("blur", () => {
+  const toast = getToast();
+  if (toast && toast.classList.contains("info")) hideToast();
+});
+
+
+function abrirModal() {
+  document.getElementById("modalSucesso").classList.add("ativo");
+}
+
+function fecharModal() {
+  document.getElementById("modalSucesso").classList.remove("ativo");
+}

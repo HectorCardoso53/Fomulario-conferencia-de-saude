@@ -33,7 +33,7 @@
 
   <div class="wrapper">
     <div class="header">
-      <h1>Formulário de emissão de  <span> Certificado</span></h1>
+      <h1>Formulário de emissão de <span> Certificado</span></h1>
       <p class="subtitle">Preencha o formulário abaixo e nos ajude<br>a melhorar os próximos eventos.</p>
     </div>
 
@@ -43,6 +43,8 @@
         <div class="field" id="field-nome">
           <label for="nome">Nome completo</label>
           <input type="text" id="nome" placeholder="Ex: Maria da Silva" autocomplete="name" />
+          <span class="field-hint"> Digite nome e sobrenome completos com inicial maiúscula para emissão do certificado.
+            Ex: Maria da Silva</span>
           <div class="field-error">Por favor, informe seu nome completo.</div>
         </div>
 
@@ -92,6 +94,18 @@
       Secretaria Municipal de Eficiência Governamental &mdash; SEMEG"
     </div>
   </div>
+
+  <!-- MODAL DE SUCESSO -->
+<div class="modal-overlay" id="modalSucesso">
+  <div class="modal-box">
+    <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="modal-brasao" />
+    <h2 class="modal-titulo">Formulário enviado!</h2>
+    <p class="modal-msg">Sua participação foi registrada com sucesso.<br>Em breve você receberá seu certificado.</p>
+    <button class="btn modal-btn" onclick="fecharModal()">
+      <span>Fechar</span>
+    </button>
+  </div>
+</div>
 
   <script src="script.js"></script>
 </body>
