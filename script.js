@@ -1,7 +1,8 @@
 const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbwX-ZqXtyHBc6EYVDFacqHUEfXnadxX7QcsJ30rdnR_Ka4E9uFEuLaC_WKmxWn0NwMW3A/exec";
 
-const form = document.getElementById("feedbackForm");
+
+  const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
 
 // Sempre busca o toast no DOM para evitar null
@@ -58,6 +59,17 @@ function validate() {
     ok = false;
   } else {
     fieldEmail.classList.remove("has-error");
+  }
+
+  // ── Participante ──
+  const participante = document.getElementById("participante").value;
+  const fieldParticipante = document.getElementById("field-participante");
+
+  if (!participante) {
+    fieldParticipante.classList.add("has-error");
+    ok = false;
+  } else {
+    fieldParticipante.classList.remove("has-error");
   }
 
   // ── Opinião ──
@@ -136,6 +148,20 @@ form.addEventListener("submit", async (e) => {
 
   if (!validate()) return;
 
+  // 🔥 pega o select corretamente
+  const select = document.getElementById("participante");
+  const participante = select.options[select.selectedIndex]?.value || "";
+
+  console.log("Participante capturado:", participante);
+
+  // 🔒 trava se vier vazio (segurança extra)
+  if (!participante) {
+    const fieldParticipante = document.getElementById("field-participante");
+    fieldParticipante.classList.add("has-error");
+    showToast("error", "Selecione o tipo de participação.");
+    return;
+  }
+
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
   const opiniao = document.getElementById("opiniao").value.trim();
@@ -150,27 +176,37 @@ form.addEventListener("submit", async (e) => {
     fieldEmail.classList.add("has-error");
     fieldEmail.querySelector(".field-error").textContent =
       "Este e-mail já enviou uma resposta.";
+
     showToast(
       "error",
       "Este e-mail já foi cadastrado. Cada pessoa pode responder apenas uma vez.",
     );
+
     btn.disabled = false;
     btn.classList.remove("loading");
     return;
   }
 
   try {
-    const params = new URLSearchParams({ nome, email, opiniao });
+    const params = new URLSearchParams();
+
+    params.append("nome", nome);
+    params.append("email", email);
+    params.append("opiniao", opiniao);
+    params.append("participante", participante);
+
+    console.log("Enviando dados:", Object.fromEntries(params));
+
     await enviarViaIframe(params);
+
     form.reset();
     abrirModal();
-    setTimeout(() => hideToast(), 5000);
   } catch (err) {
+    console.error("Erro no envio:", err);
     showToast(
       "error",
       "Erro ao enviar. Verifique sua conexão e tente novamente.",
     );
-    setTimeout(() => hideToast(), 5000);
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");
@@ -189,7 +225,6 @@ document.getElementById("nome").addEventListener("blur", () => {
   const toast = getToast();
   if (toast && toast.classList.contains("info")) hideToast();
 });
-
 
 function abrirModal() {
   document.getElementById("modalSucesso").classList.add("ativo");

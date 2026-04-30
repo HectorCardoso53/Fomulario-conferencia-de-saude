@@ -54,6 +54,16 @@
           <div class="field-error">Informe um e-mail válido.</div>
         </div>
 
+        <div class="field" id="field-participante">
+          <label for="participante">Tipo de participação</label>
+          <select id="participante" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="Participante">Participante</option>
+            <option value="Delegado">Delegado</option>
+          </select>
+          <div class="field-error">Selecione uma opção.</div>
+        </div>
+
         <div class="divider"></div>
 
         <div class="field" id="field-opiniao">
@@ -96,16 +106,16 @@
   </div>
 
   <!-- MODAL DE SUCESSO -->
-<div class="modal-overlay" id="modalSucesso">
-  <div class="modal-box">
-    <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="modal-brasao" />
-    <h2 class="modal-titulo">Formulário enviado!</h2>
-    <p class="modal-msg">Sua participação foi registrada com sucesso.<br>Em breve você receberá seu certificado.</p>
-    <button class="btn modal-btn" onclick="fecharModal()">
-      <span>Fechar</span>
-    </button>
+  <div class="modal-overlay" id="modalSucesso">
+    <div class="modal-box">
+      <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="modal-brasao" />
+      <h2 class="modal-titulo">Formulário enviado!</h2>
+      <p class="modal-msg">Sua participação foi registrada com sucesso.<br>Em breve você receberá seu certificado.</p>
+      <button class="btn modal-btn" onclick="fecharModal()">
+        <span>Fechar</span>
+      </button>
+    </div>
   </div>
-</div>
 
   <script src="script.js"></script>
 </body>
