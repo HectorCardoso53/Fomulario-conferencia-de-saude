@@ -644,6 +644,17 @@ body {
   filter: drop-shadow(0 4px 12px rgba(26,75,140,0.2));
 }
 
+/* ── LINK VOLTAR ── */
+.link-voltar {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--azul);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+.link-voltar:hover { opacity: 1; }
+
 /* ── FOOTER ── */
 .footer {
   position: fixed;
