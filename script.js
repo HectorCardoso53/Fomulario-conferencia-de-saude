@@ -22,18 +22,31 @@ function hideToast() {
   if (toast) toast.className = "toast";
 }
 
-// Máscara de telefone brasileiro
-document.getElementById("telefone").addEventListener("input", (e) => {
-  let v = e.target.value.replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
-  if (v.length > 6) {
-    v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4}).*/, "($1) $2-$3");
-  } else if (v.length > 2) {
-    v = v.replace(/^(\d{2})(\d*)/, "($1) $2");
-  } else if (v.length > 0) {
-    v = v.replace(/^(\d*)/, "($1");
+// Máscara de telefone — DDD 93 fixo + 9 dígitos
+const telInput = document.getElementById("telefone");
+const PREFIX = "(93) ";
+
+telInput.addEventListener("focus", () => {
+  if (!telInput.value.startsWith(PREFIX)) {
+    telInput.value = PREFIX;
   }
-  e.target.value = v;
+});
+
+telInput.addEventListener("input", (e) => {
+  let v = e.target.value;
+  if (!v.startsWith(PREFIX)) v = PREFIX;
+  let digits = v.slice(PREFIX.length).replace(/\D/g, "").slice(0, 9);
+  if (digits.length > 5) {
+    digits = digits.slice(0, 5) + "-" + digits.slice(5);
+  }
+  e.target.value = PREFIX + digits;
+});
+
+telInput.addEventListener("keydown", (e) => {
+  const pos = e.target.selectionStart;
+  if ((e.key === "Backspace" || e.key === "Delete") && pos <= PREFIX.length) {
+    e.preventDefault();
+  }
 });
 
 function validate() {
