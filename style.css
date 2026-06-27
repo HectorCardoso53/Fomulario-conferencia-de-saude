@@ -8,6 +8,10 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 :root {
   --azul: #1a4b8c;
   --azul-escuro: #0f2f5c;
@@ -34,8 +38,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
+  justify-content: flex-start;
+  padding: 2rem 1rem 0;
 }
 
 .logo-evento {
@@ -521,9 +525,10 @@ select:focus {
   display: flex;
 }
 
-/* empurra o conteúdo para baixo do header fixo */
+/* empurra o conteúdo para baixo do header e acima do footer fixos */
 body {
   padding-top: 100px;
+  padding-bottom: 60px;
 }
 
 @media (max-width: 480px) {
@@ -596,4 +601,66 @@ body {
   object-fit: contain;
   margin-bottom: 1rem;
   filter: drop-shadow(0 4px 12px rgba(26,75,140,0.2));
+}
+
+/* ── FOOTER ── */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: linear-gradient(90deg, var(--azul-escuro) 0%, var(--azul) 100%);
+  border-top: 2px solid var(--amarelo);
+  padding: 0.65rem 1.5rem;
+}
+
+.footer-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.footer-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.footer-brasao {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+  flex-shrink: 0;
+}
+
+.footer-org {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.footer-prefeitura {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.footer-semeg {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  color: var(--amarelo);
+  opacity: 0.85;
+}
+
+.footer-direita {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.6);
+  text-align: right;
+  white-space: nowrap;
 }

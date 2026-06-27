@@ -1,11 +1,9 @@
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwX-ZqXtyHBc6EYVDFacqHUEfXnadxX7QcsJ30rdnR_Ka4E9uFEuLaC_WKmxWn0NwMW3A/exec";
+  "https://script.google.com/macros/s/AKfycbzYdVbT0JukV5UkXaoBvzitnKdepZtydF42UHHTisuwHN-RjMfjTiJSLdQGpY5xkVb6Qw/exec";
 
-
-  const form = document.getElementById("feedbackForm");
+const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
 
-// Sempre busca o toast no DOM para evitar null
 function getToast() {
   return document.getElementById("toast");
 }
@@ -24,6 +22,20 @@ function hideToast() {
   if (toast) toast.className = "toast";
 }
 
+// Máscara de telefone brasileiro
+document.getElementById("telefone").addEventListener("input", (e) => {
+  let v = e.target.value.replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+  if (v.length > 6) {
+    v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4}).*/, "($1) $2-$3");
+  } else if (v.length > 2) {
+    v = v.replace(/^(\d{2})(\d*)/, "($1) $2");
+  } else if (v.length > 0) {
+    v = v.replace(/^(\d*)/, "($1");
+  }
+  e.target.value = v;
+});
+
 function validate() {
   let ok = true;
 
@@ -31,9 +43,7 @@ function validate() {
   const nome = document.getElementById("nome").value.trim();
   const fieldNome = document.getElementById("field-nome");
   const nomeValido =
-    /^[A-ZÀ-Ú][a-zA-Zà-úÀ-Ú]*(?: (?:de|da|do|dos|das|e|[A-ZÀ-Ú])[a-zA-Zà-úÀ-Ú]*)+$/.test(
-      nome,
-    );
+    /^[A-ZÀ-Ú][a-zA-Zà-úÀ-Ú]*(?: (?:de|da|do|dos|das|e|[A-ZÀ-Ú])[a-zA-Zà-úÀ-Ú]*)+$/.test(nome);
 
   if (nome.length < 3) {
     fieldNome.classList.add("has-error");
@@ -61,49 +71,63 @@ function validate() {
     fieldEmail.classList.remove("has-error");
   }
 
-  // ── Participante ──
-  const participante = document.getElementById("participante").value;
-  const fieldParticipante = document.getElementById("field-participante");
-
-  if (!participante) {
-    fieldParticipante.classList.add("has-error");
+  // ── Telefone ──
+  const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
+  const fieldTelefone = document.getElementById("field-telefone");
+  if (telefone.length < 10 || telefone.length > 11) {
+    fieldTelefone.classList.add("has-error");
+    fieldTelefone.querySelector(".field-error").textContent =
+      "Informe um telefone válido. Ex: (91) 99999-9999";
     ok = false;
   } else {
-    fieldParticipante.classList.remove("has-error");
+    fieldTelefone.classList.remove("has-error");
   }
 
-  // ── Opinião ──
-  const opiniao = document.getElementById("opiniao").value.trim();
-  const fieldOpiniao = document.getElementById("field-opiniao");
-  if (opiniao.length < 5) {
-    fieldOpiniao.classList.add("has-error");
+  // ── Instituição ──
+  const instituicao = document.getElementById("instituicao").value.trim();
+  const fieldInstituicao = document.getElementById("field-instituicao");
+  if (instituicao.length < 2) {
+    fieldInstituicao.classList.add("has-error");
     ok = false;
   } else {
-    fieldOpiniao.classList.remove("has-error");
-  }
-
-  // ── Declaração ──
-  const declaracao = document.getElementById("declaracao").checked;
-  const fieldDeclaracao = document.getElementById("field-declaracao");
-  if (!declaracao) {
-    fieldDeclaracao.classList.add("has-error");
-    ok = false;
-  } else {
-    fieldDeclaracao.classList.remove("has-error");
+    fieldInstituicao.classList.remove("has-error");
   }
 
   return ok;
 }
 
-// Verifica se o e-mail já foi cadastrado
+// Verifica se o e-mail já está inscrito
 async function emailJaCadastrado(email) {
   try {
-    const url =
-      SCRIPT_URL + "?acao=verificar&email=" + encodeURIComponent(email);
+    const url = SCRIPT_URL + "?acao=verificar_email&email=" + encodeURIComponent(email);
     const res = await fetch(url);
     const data = await res.json();
     return data.existe === true;
-  } catch (err) {
+  } catch {
+    return false;
+  }
+}
+
+// Verifica se o telefone já está inscrito
+async function telefoneJaCadastrado(telefone) {
+  try {
+    const url = SCRIPT_URL + "?acao=verificar_telefone&telefone=" + encodeURIComponent(telefone);
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.existe === true;
+  } catch {
+    return false;
+  }
+}
+
+// Verifica se o limite de 100 inscrições foi atingido
+async function limiteAlcancado() {
+  try {
+    const url = SCRIPT_URL + "?acao=verificar_limite";
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.limite_alcancado === true;
+  } catch {
     return false;
   }
 }
@@ -148,40 +172,47 @@ form.addEventListener("submit", async (e) => {
 
   if (!validate()) return;
 
-  // 🔥 pega o select corretamente
-  const select = document.getElementById("participante");
-  const participante = select.options[select.selectedIndex]?.value || "";
-
-  console.log("Participante capturado:", participante);
-
-  // 🔒 trava se vier vazio (segurança extra)
-  if (!participante) {
-    const fieldParticipante = document.getElementById("field-participante");
-    fieldParticipante.classList.add("has-error");
-    showToast("error", "Selecione o tipo de participação.");
-    return;
-  }
-
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
-  const opiniao = document.getElementById("opiniao").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const instituicao = document.getElementById("instituicao").value.trim();
 
   btn.disabled = true;
   btn.classList.add("loading");
 
-  // Verifica duplicado
-  const duplicado = await emailJaCadastrado(email);
-  if (duplicado) {
-    const fieldEmail = document.getElementById("field-email");
-    fieldEmail.classList.add("has-error");
-    fieldEmail.querySelector(".field-error").textContent =
-      "Este e-mail já enviou uma resposta.";
-
+  // Verifica se o limite de inscrições foi atingido
+  const limite = await limiteAlcancado();
+  if (limite) {
     showToast(
       "error",
-      "Este e-mail já foi cadastrado. Cada pessoa pode responder apenas uma vez.",
+      "O limite de inscrições já foi alcançado. Não é possível realizar novas inscrições.",
     );
+    btn.disabled = false;
+    btn.classList.remove("loading");
+    return;
+  }
 
+  // Verifica duplicidade por e-mail e telefone em paralelo
+  const [emailDuplicado, telefoneDuplicado] = await Promise.all([
+    emailJaCadastrado(email),
+    telefoneJaCadastrado(telefone.replace(/\D/g, "")),
+  ]);
+
+  if (emailDuplicado) {
+    const fieldEmail = document.getElementById("field-email");
+    fieldEmail.classList.add("has-error");
+    fieldEmail.querySelector(".field-error").textContent = "Este e-mail já está inscrito.";
+    showToast("error", "Este e-mail já foi cadastrado. Cada pessoa pode se inscrever apenas uma vez.");
+    btn.disabled = false;
+    btn.classList.remove("loading");
+    return;
+  }
+
+  if (telefoneDuplicado) {
+    const fieldTelefone = document.getElementById("field-telefone");
+    fieldTelefone.classList.add("has-error");
+    fieldTelefone.querySelector(".field-error").textContent = "Este telefone já está inscrito.";
+    showToast("error", "Este número já foi cadastrado. Cada pessoa pode se inscrever apenas uma vez.");
     btn.disabled = false;
     btn.classList.remove("loading");
     return;
@@ -189,13 +220,10 @@ form.addEventListener("submit", async (e) => {
 
   try {
     const params = new URLSearchParams();
-
     params.append("nome", nome);
     params.append("email", email);
-    params.append("opiniao", opiniao);
-    params.append("participante", participante);
-
-    console.log("Enviando dados:", Object.fromEntries(params));
+    params.append("telefone", telefone);
+    params.append("instituicao", instituicao);
 
     await enviarViaIframe(params);
 
@@ -211,19 +239,6 @@ form.addEventListener("submit", async (e) => {
     btn.disabled = false;
     btn.classList.remove("loading");
   }
-});
-
-// ── Orientação ao focar no nome ──
-document.getElementById("nome").addEventListener("focus", () => {
-  showToast(
-    "info",
-    "Digite nome e sobrenome com inicial maiúscula para emissão do certificado. Ex: Maria da Silva",
-  );
-});
-
-document.getElementById("nome").addEventListener("blur", () => {
-  const toast = getToast();
-  if (toast && toast.classList.contains("info")) hideToast();
 });
 
 function abrirModal() {

@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="img/prefeitura.png">
-  <title>Formulário — Conferência da Saúde</title>
+  <title>Inscrição — Palestra de Empreendedorismo</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=Sora:wght@500;600&display=swap"
     rel="stylesheet" />
@@ -27,14 +27,13 @@
           <div class="header-lema">"A transformação não vai parar!"</div>
         </div>
       </div>
-      <img src="img/saude.png" alt="Logo Conferência de Saúde" class="header-brasao-evento" />
     </div>
   </header>
 
   <div class="wrapper">
     <div class="header">
-      <h1>Formulário de emissão de <span> Certificado</span></h1>
-      <p class="subtitle">Preencha o formulário abaixo e nos ajude<br>a melhorar os próximos eventos.</p>
+      <h1>Formulário de <span>Inscrição</span></h1>
+      <p class="subtitle">Preencha os dados abaixo para confirmar sua inscrição<br>na Palestra de Empreendedorismo.</p>
     </div>
 
     <div class="card">
@@ -43,8 +42,7 @@
         <div class="field" id="field-nome">
           <label for="nome">Nome completo</label>
           <input type="text" id="nome" placeholder="Ex: Maria da Silva" autocomplete="name" />
-          <span class="field-hint"> Digite nome e sobrenome completos com inicial maiúscula para emissão do certificado.
-            Ex: Maria da Silva</span>
+          <span class="field-hint">Digite nome e sobrenome com inicial maiúscula. Ex: Maria da Silva</span>
           <div class="field-error">Por favor, informe seu nome completo.</div>
         </div>
 
@@ -54,42 +52,21 @@
           <div class="field-error">Informe um e-mail válido.</div>
         </div>
 
-        <div class="field" id="field-participante">
-          <label for="participante">Tipo de participação</label>
-          <select id="participante" required>
-            <option value="" disabled selected>Selecione</option>
-            <option value="Participante">Participante</option>
-            <option value="Delegado">Delegado</option>
-          </select>
-          <div class="field-error">Selecione uma opção.</div>
+        <div class="field" id="field-telefone">
+          <label for="telefone">Telefone</label>
+          <input type="tel" id="telefone" placeholder="(00) 00000-0000" autocomplete="tel" />
+          <div class="field-error">Informe um telefone válido.</div>
         </div>
 
-        <div class="divider"></div>
-
-        <div class="field" id="field-opiniao">
-          <label for="opiniao">Opinião sobre a conferência</label>
-          <textarea id="opiniao"
-            placeholder="Conte o que achou: pontos positivos, o que poderia melhorar, experiências..."></textarea>
-          <div class="field-error">Por favor, compartilhe sua opinião.</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="field" id="field-declaracao">
-          <label>Declaração de participação</label>
-          <div class="declaracao-box">
-            <input type="checkbox" id="declaracao" />
-            <label for="declaracao" class="declaracao-label">
-              Declaro que participei da <strong>Conferência Municipal de Saúde</strong>
-              e que as informações prestadas neste formulário são verdadeiras.
-            </label>
-          </div>
-          <div class="field-error" id="erro-declaracao">Você precisa confirmar sua participação.</div>
+        <div class="field" id="field-instituicao">
+          <label for="instituicao">Instituição / Organização</label>
+          <input type="text" id="instituicao" placeholder="Ex: UFOPA, Secretaria de Saúde, Autônomo..." autocomplete="organization" />
+          <div class="field-error">Informe sua instituição ou organização.</div>
         </div>
 
         <button type="submit" class="btn" id="submitBtn">
           <div class="spinner"></div>
-          <span class="btn-text">Enviar feedback</span>
+          <span class="btn-text">Realizar inscrição</span>
         </button>
 
         <div class="toast" id="toast">
@@ -100,17 +77,29 @@
       </form>
     </div>
 
-    <div class="footer-form">
-      Secretaria Municipal de Eficiência Governamental &mdash; SEMEG"
-    </div>
   </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-esquerda">
+        <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="footer-brasao" />
+        <div class="footer-org">
+          <span class="footer-prefeitura">Prefeitura Municipal de Oriximiná</span>
+          <span class="footer-semeg">Secretaria Municipal de Eficiência Governamental — SEMEG</span>
+        </div>
+      </div>
+      <div class="footer-direita">
+        &copy; 2026 &mdash; Todos os direitos reservados
+      </div>
+    </div>
+  </footer>
 
   <!-- MODAL DE SUCESSO -->
   <div class="modal-overlay" id="modalSucesso">
     <div class="modal-box">
       <img src="img/prefeitura.png" alt="Brasão de Oriximiná" class="modal-brasao" />
-      <h2 class="modal-titulo">Formulário enviado!</h2>
-      <p class="modal-msg">Sua participação foi registrada com sucesso.<br>Em breve você receberá seu certificado.</p>
+      <h2 class="modal-titulo">Inscrição realizada!</h2>
+      <p class="modal-msg">Sua inscrição na Palestra de Empreendedorismo foi confirmada com sucesso.<br>Você receberá um e-mail de confirmação em breve.</p>
       <button class="btn modal-btn" onclick="fecharModal()">
         <span>Fechar</span>
       </button>
