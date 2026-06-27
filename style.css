@@ -540,6 +540,44 @@ body {
     width: 34px;
     height: 34px;
   }
+
+  /* Footer responsivo */
+  body {
+    padding-bottom: 80px;
+  }
+
+  .footer {
+    padding: 0.5rem 0.85rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0;
+  }
+
+  .footer-esquerda {
+    gap: 0.45rem;
+  }
+
+  .footer-brasao {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-prefeitura {
+    font-size: 0.65rem;
+  }
+
+  .footer-semeg {
+    font-size: 0.58rem;
+  }
+
+  .footer-direita {
+    font-size: 0.60rem;
+    text-align: center;
+  }
 }
 
 /* ── MODAL DE SUCESSO ── */
