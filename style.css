@@ -541,6 +541,11 @@ body {
     height: 34px;
   }
 
+  /* Espaçamento lateral do formulário */
+  .wrapper {
+    padding: 0 1rem;
+  }
+
   /* Footer responsivo */
   body {
     padding-bottom: 80px;
