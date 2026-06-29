@@ -180,18 +180,6 @@ async function telefoneJaCadastrado(telefone) {
   }
 }
 
-// Verifica se o limite de 100 inscrições foi atingido
-async function limiteAlcancado() {
-  try {
-    const url = SCRIPT_URL + "?acao=verificar_limite";
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.limite_alcancado === true;
-  } catch {
-    return false;
-  }
-}
-
 // Envia via iframe para evitar bloqueio de CORS
 function enviarViaIframe(params) {
   return new Promise((resolve) => {
@@ -240,15 +228,6 @@ form.addEventListener("submit", async (e) => {
 
   btn.disabled = true;
   btn.classList.add("loading");
-
-  // Verifica se o limite de inscrições foi atingido
-  const limite = await limiteAlcancado();
-  if (limite) {
-    showToast("error", "O limite de inscrições já foi alcançado. Não é possível realizar novas inscrições.");
-    btn.disabled = false;
-    btn.classList.remove("loading");
-    return;
-  }
 
   // Verifica duplicidade por e-mail e CPF (telefone só se preenchido)
   const telDigitos = telefone.replace(/\D/g, "");
