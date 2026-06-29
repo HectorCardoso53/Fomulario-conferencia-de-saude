@@ -51,7 +51,7 @@ const telInput = document.getElementById("telefone");
 const PREFIX = "(93) ";
 
 telInput.addEventListener("focus", () => {
-  if (!telInput.value.startsWith(PREFIX)) {
+  if (telInput.value === "" || telInput.value === PREFIX) {
     telInput.value = PREFIX;
   }
 });
@@ -119,13 +119,13 @@ function validate() {
     fieldCpf.classList.remove("has-error");
   }
 
-  // ── Telefone ──
+  // ── Telefone (opcional) ──
   const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
   const fieldTelefone = document.getElementById("field-telefone");
-  if (telefone.length < 10 || telefone.length > 11) {
+  if (telefone.length > 0 && (telefone.length < 10 || telefone.length > 11)) {
     fieldTelefone.classList.add("has-error");
     fieldTelefone.querySelector(".field-error").textContent =
-      "Informe um telefone válido. Ex: (91) 99999-9999";
+      "Telefone incompleto. Ex: (93) 99999-9999";
     ok = false;
   } else {
     fieldTelefone.classList.remove("has-error");
@@ -250,11 +250,12 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Verifica duplicidade por e-mail, CPF e telefone em paralelo
+  // Verifica duplicidade por e-mail e CPF (telefone só se preenchido)
+  const telDigitos = telefone.replace(/\D/g, "");
   const [emailDuplicado, cpfDuplicado, telefoneDuplicado] = await Promise.all([
     emailJaCadastrado(email),
     cpfJaCadastrado(cpf),
-    telefoneJaCadastrado(telefone.replace(/\D/g, "")),
+    telDigitos.length >= 10 ? telefoneJaCadastrado(telDigitos) : Promise.resolve(false),
   ]);
 
   if (emailDuplicado) {

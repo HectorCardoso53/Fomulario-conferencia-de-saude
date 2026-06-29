@@ -40,33 +40,34 @@
       <form id="feedbackForm" novalidate>
 
         <div class="field" id="field-nome">
-          <label for="nome">Nome completo</label>
+          <label for="nome">Nome completo <span class="obrigatorio">*</span></label>
           <input type="text" id="nome" placeholder="Ex: Maria da Silva" autocomplete="name" />
           <span class="field-hint">Digite nome e sobrenome com inicial maiúscula. Ex: Maria da Silva</span>
           <div class="field-error">Por favor, informe seu nome completo.</div>
         </div>
 
         <div class="field" id="field-email">
-          <label for="email">E-mail</label>
+          <label for="email">E-mail <span class="obrigatorio">*</span></label>
           <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" />
           <div class="field-error">Informe um e-mail válido.</div>
         </div>
 
         <div class="field" id="field-cpf">
-          <label for="cpf">CPF</label>
+          <label for="cpf">CPF <span class="obrigatorio">*</span></label>
           <input type="text" id="cpf" placeholder="000.000.000-00" autocomplete="off" inputmode="numeric" />
           <div class="field-error">Informe um CPF válido.</div>
         </div>
 
         <div class="field" id="field-telefone">
-          <label for="telefone">Telefone</label>
+          <label for="telefone">Telefone <span style="font-weight:400;opacity:0.6;text-transform:none;font-size:11px;">(opcional)</span></label>
           <input type="tel" id="telefone" placeholder="(93) 00000-0000" autocomplete="tel" />
           <div class="field-error">Informe um telefone válido.</div>
         </div>
 
         <div class="field" id="field-instituicao">
-          <label for="instituicao">Instituição / Organização</label>
+          <label for="instituicao">Instituição / Organização <span class="obrigatorio">*</span></label>
           <input type="text" id="instituicao" placeholder="Ex: UFOPA, Secretaria de Saúde, Autônomo..." autocomplete="organization" />
+          <span class="field-hint">Informe onde você trabalha ou estuda. Ex: UFOPA, Prefeitura Municipal, Autônomo</span>
           <div class="field-error">Informe sua instituição ou organização.</div>
         </div>
 
