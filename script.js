@@ -1,5 +1,5 @@
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzBJPPVSF9WLZ-Nip3Z57KW1Rj0GCIUShxVuOAt_cnI8RHjpI07RyQhmmKzDZL0CxbBPg/exec";
+  "https://script.google.com/macros/s/AKfycbxFYnBS-q9DNvp2J1v9BcaFos36PVDKZIv7E5hoBNjX1Gk0WSqPX5uWEJHzN1cXJy79wg/exec";
 
 const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
@@ -20,6 +20,30 @@ function showToast(type, msg) {
 function hideToast() {
   const toast = getToast();
   if (toast) toast.className = "toast";
+}
+
+// Máscara de CPF
+document.getElementById("cpf").addEventListener("input", (e) => {
+  let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+  v = v.replace(/^(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3");
+  v = v.replace(/\.(\d{3})(\d)/, ".$1-$2");
+  e.target.value = v;
+});
+
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, "");
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
+  let r = (soma * 10) % 11;
+  if (r === 10 || r === 11) r = 0;
+  if (r !== parseInt(cpf[9])) return false;
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf[i]) * (11 - i);
+  r = (soma * 10) % 11;
+  if (r === 10 || r === 11) r = 0;
+  return r === parseInt(cpf[10]);
 }
 
 // Máscara de telefone — DDD 93 fixo + 9 dígitos
@@ -84,6 +108,17 @@ function validate() {
     fieldEmail.classList.remove("has-error");
   }
 
+  // ── CPF ──
+  const cpf = document.getElementById("cpf").value.trim();
+  const fieldCpf = document.getElementById("field-cpf");
+  if (!validarCPF(cpf)) {
+    fieldCpf.classList.add("has-error");
+    fieldCpf.querySelector(".field-error").textContent = "Informe um CPF válido.";
+    ok = false;
+  } else {
+    fieldCpf.classList.remove("has-error");
+  }
+
   // ── Telefone ──
   const telefone = document.getElementById("telefone").value.replace(/\D/g, "");
   const fieldTelefone = document.getElementById("field-telefone");
@@ -107,6 +142,18 @@ function validate() {
   }
 
   return ok;
+}
+
+// Verifica se o CPF já está inscrito
+async function cpfJaCadastrado(cpf) {
+  try {
+    const url = SCRIPT_URL + "?acao=verificar_cpf&cpf=" + encodeURIComponent(cpf.replace(/\D/g, ""));
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.existe === true;
+  } catch {
+    return false;
+  }
 }
 
 // Verifica se o e-mail já está inscrito
@@ -187,6 +234,7 @@ form.addEventListener("submit", async (e) => {
 
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
+  const cpf = document.getElementById("cpf").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
   const instituicao = document.getElementById("instituicao").value.trim();
 
@@ -196,18 +244,16 @@ form.addEventListener("submit", async (e) => {
   // Verifica se o limite de inscrições foi atingido
   const limite = await limiteAlcancado();
   if (limite) {
-    showToast(
-      "error",
-      "O limite de inscrições já foi alcançado. Não é possível realizar novas inscrições.",
-    );
+    showToast("error", "O limite de inscrições já foi alcançado. Não é possível realizar novas inscrições.");
     btn.disabled = false;
     btn.classList.remove("loading");
     return;
   }
 
-  // Verifica duplicidade por e-mail e telefone em paralelo
-  const [emailDuplicado, telefoneDuplicado] = await Promise.all([
+  // Verifica duplicidade por e-mail, CPF e telefone em paralelo
+  const [emailDuplicado, cpfDuplicado, telefoneDuplicado] = await Promise.all([
     emailJaCadastrado(email),
+    cpfJaCadastrado(cpf),
     telefoneJaCadastrado(telefone.replace(/\D/g, "")),
   ]);
 
@@ -216,6 +262,16 @@ form.addEventListener("submit", async (e) => {
     fieldEmail.classList.add("has-error");
     fieldEmail.querySelector(".field-error").textContent = "Este e-mail já está inscrito.";
     showToast("error", "Este e-mail já foi cadastrado. Cada pessoa pode se inscrever apenas uma vez.");
+    btn.disabled = false;
+    btn.classList.remove("loading");
+    return;
+  }
+
+  if (cpfDuplicado) {
+    const fieldCpf = document.getElementById("field-cpf");
+    fieldCpf.classList.add("has-error");
+    fieldCpf.querySelector(".field-error").textContent = "Este CPF já está inscrito.";
+    showToast("error", "Este CPF já foi cadastrado. Cada pessoa pode se inscrever apenas uma vez.");
     btn.disabled = false;
     btn.classList.remove("loading");
     return;
@@ -235,6 +291,7 @@ form.addEventListener("submit", async (e) => {
     const params = new URLSearchParams();
     params.append("nome", nome);
     params.append("email", email);
+    params.append("cpf", cpf.replace(/\D/g, ""));
     params.append("telefone", telefone);
     params.append("instituicao", instituicao);
 
