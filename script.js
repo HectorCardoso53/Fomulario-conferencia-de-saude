@@ -1,5 +1,5 @@
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxFYnBS-q9DNvp2J1v9BcaFos36PVDKZIv7E5hoBNjX1Gk0WSqPX5uWEJHzN1cXJy79wg/exec";
+  "https://script.google.com/macros/s/AKfycbyIZN7z-XISTHNBtUycmAl17ZLAILBncULXuB9CTTUoj0cozOs5UFjpa6cllo7vveA1/exec";
 
 const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
@@ -46,31 +46,18 @@ function validarCPF(cpf) {
   return r === parseInt(cpf[10]);
 }
 
-// Máscara de telefone — DDD 93 fixo + 9 dígitos
+// Máscara de telefone — qualquer DDD
 const telInput = document.getElementById("telefone");
-const PREFIX = "(93) ";
-
-telInput.addEventListener("focus", () => {
-  if (telInput.value === "" || telInput.value === PREFIX) {
-    telInput.value = PREFIX;
-  }
-});
 
 telInput.addEventListener("input", (e) => {
-  let v = e.target.value;
-  if (!v.startsWith(PREFIX)) v = PREFIX;
-  let digits = v.slice(PREFIX.length).replace(/\D/g, "").slice(0, 9);
-  if (digits.length > 5) {
-    digits = digits.slice(0, 5) + "-" + digits.slice(5);
+  let digits = e.target.value.replace(/\D/g, "").slice(0, 11);
+  let v = "";
+  if (digits.length > 0) v = "(" + digits.slice(0, 2);
+  if (digits.length >= 3) v += ") " + digits.slice(2, digits.length <= 10 ? 6 : 7);
+  if (digits.length >= (digits.length <= 10 ? 7 : 8)) {
+    v += "-" + digits.slice(digits.length <= 10 ? 6 : 7);
   }
-  e.target.value = PREFIX + digits;
-});
-
-telInput.addEventListener("keydown", (e) => {
-  const pos = e.target.selectionStart;
-  if ((e.key === "Backspace" || e.key === "Delete") && pos <= PREFIX.length) {
-    e.preventDefault();
-  }
+  e.target.value = v;
 });
 
 function validate() {
