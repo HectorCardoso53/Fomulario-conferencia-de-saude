@@ -23,15 +23,29 @@ function hideToast() {
 }
 
 function validate() {
+  let ok = true;
+
   const email = document.getElementById("email").value.trim();
   const fieldEmail = document.getElementById("field-email");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldEmail.classList.add("has-error");
     fieldEmail.querySelector(".field-error").textContent = "Informe um e-mail válido.";
-    return false;
+    ok = false;
+  } else {
+    fieldEmail.classList.remove("has-error");
   }
-  fieldEmail.classList.remove("has-error");
-  return true;
+
+  const opiniao = document.getElementById("opiniao").value.trim();
+  const fieldOpiniao = document.getElementById("field-opiniao");
+  if (opiniao.length < 3) {
+    fieldOpiniao.classList.add("has-error");
+    fieldOpiniao.querySelector(".field-error").textContent = "Por favor, informe sua opinião sobre o evento.";
+    ok = false;
+  } else {
+    fieldOpiniao.classList.remove("has-error");
+  }
+
+  return ok;
 }
 
 form.addEventListener("submit", async (e) => {
