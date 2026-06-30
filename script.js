@@ -1,5 +1,5 @@
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycby5eWDRQiImmFzkuMo9FubCE8Bk5Uci2G0GFQl0X05dSbl9kqyI9jYy36g9Uzkp1KyLpw/exec";
+  "https://script.google.com/macros/s/AKfycbzzubeeg-Iq5HpkhD5fHzH24a2hBczEdO1Vl6cMv0O1Tl1qwB8H5KfmMC1gke4ycyt09w/exec";
 
 const form = document.getElementById("feedbackForm");
 const btn = document.getElementById("submitBtn");
