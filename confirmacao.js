@@ -46,7 +46,8 @@ form.addEventListener("submit", async (e) => {
   btn.classList.add("loading");
 
   try {
-    const url = SCRIPT_URL + "?acao=confirmar&email=" + encodeURIComponent(email);
+    const opiniao = document.getElementById("opiniao").value.trim();
+    const url = SCRIPT_URL + "?acao=confirmar&email=" + encodeURIComponent(email) + "&opiniao=" + encodeURIComponent(opiniao);
     const res = await fetch(url);
     const data = await res.json();
 
